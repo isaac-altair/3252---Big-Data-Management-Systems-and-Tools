@@ -1,0 +1,117 @@
+cqlsh:university_ass> CREATE TABLE person (id uuid PRIMARY KEY, person_name text, person_phone float, person_address text, university_address text, university_distance float);
+cqlsh:university_ass> INSERT INTO person (id, person_name, person_phone, person_address, university_address, university_distance) VALUES (9ee49ef4-320f-4326-a9b3-a2f00a9dcdf5, 'Ashish', 6578501234, 'M1J 2G6', 'M5S 2V8', 15.2);
+cqlsh:university_ass> INSERT INTO person (id, person_name, person_phone, person_address, university_address, university_distance) VALUES (672bb054-fc9a-4904-b658-3f5996851d74, 'Isaac', 6579891234, 'M2J 1J3', 'M5S 2V8', 14.46);
+cqlsh:university_ass> INSERT INTO person (id, person_name, person_phone, person_address, university_address, university_distance) VALUES (c425af4a-8a68-42b8-98c7-f24c8fb02c28, 'Isaac', 6579891234, 'M2J 1J3', 'M5B 2K3', 15);
+cqlsh:university_ass> INSERT INTO person (id, person_name, person_phone, person_address, university_address, university_distance) VALUES (fb83d38a-5b89-4eec-b1a7-0284544580f2, 'Ashish', 6578501234, 'M1J 2G6', 'M5B 2K3', 14.45);
+cqlsh:university_ass> CREATE TABLE course (Course_Name text, Course_ID text PRIMARY KEY, Course_Cost int, Course_Registration_Date text);
+cqlsh:university_ass> INSERT INTO course (Course_Name, Course_ID, Course_Cost, Course_Registration_date) VALUES ('Data Science Certificate', 'CSC_UOFT_01', 4000, 'September 16th, 2018');
+cqlsh:university_ass> INSERT INTO course (Course_Name, Course_ID, Course_Cost, Course_Registration_date) VALUES ('Certificate in Data Analytics, Big Data, and Predictive Analytics', 'RYER_SCS_01', 7000, 'October 17th, 2018');
+cqlsh:university_ass> CREATE TABLE university (University_Name text, University_Phone float, University_Address text PRIMARY KEY);
+cqlsh:university_ass> INSERT INTO university (University_Name, University_Phone, University_Address) VALUES ('UofT', 4169745467, 'M5S 2V8');
+cqlsh:university_ass> INSERT INTO university (University_Name, University_Phone, University_Address) VALUES ('Ryerson', 6479374567, 'M5B 2K3');
+cqlsh:university_ass> CREATE TABLE universities_near_a_person (id uuid, university_names text, university_addresses text, university_phone float, person_name text, person_address text, distance float, PRIMARY KEY(person_name, distance));
+cqlsh:university_ass> INSERT INTO universities_near_a_person (id, university_names, university_addresses, university_phone, person_name, person_address, distance) VALUES (9ee49ef4-320f-4326-a9b3-a2f00a9dcdf5, 'UofT', 'M5S 2V8', 4169745467, 'Ashish', 'M1J 2G6', 15.2);
+cqlsh:university_ass> INSERT INTO universities_near_a_person (id, university_names, university_addresses, university_phone, person_name, person_address, distance) VALUES (672bb054-fc9a-4904-b658-3f5996851d74, 'UofT', 'M5S 2V8', 4169745467, 'Isaac', 'M2J 1J3', 14.46);
+cqlsh:university_ass> INSERT INTO universities_near_a_person (id, university_names, university_addresses, university_phone, person_name, person_address, distance) VALUES (c425af4a-8a68-42b8-98c7-f24c8fb02c28, 'Ryerson', 'M5B 2K3', 6479374567, 'Isaac', 'M2J 1J3', 15);
+cqlsh:university_ass> INSERT INTO universities_near_a_person (id, university_names, university_addresses, university_phone, person_name, person_address, distance) VALUES (fb83d38a-5b89-4eec-b1a7-0284544580f2, 'Ryerson', 'M5B 2K3', 6479374567, 'Ashish', 'M1J 2G6', 14.45);
+cqlsh:university_ass> // Q1,  Find universities(including university info) near a person
+cqlsh:university_ass> select * from universities_near_a_person;
+
+ person_name | distance | id                                   | person_address | university_addresses | university_names | university_phone
+-------------+----------+--------------------------------------+----------------+----------------------+------------------+------------------
+      Ashish |    14.45 | fb83d38a-5b89-4eec-b1a7-0284544580f2 |        M1J 2G6 |              M5B 2K3 |          Ryerson |       6.4794e+09
+      Ashish |     15.2 | 9ee49ef4-320f-4326-a9b3-a2f00a9dcdf5 |        M1J 2G6 |              M5S 2V8 |             UofT |       4.1697e+09
+       Isaac |    14.46 | 672bb054-fc9a-4904-b658-3f5996851d74 |        M2J 1J3 |              M5S 2V8 |             UofT |       4.1697e+09
+       Isaac |       15 | c425af4a-8a68-42b8-98c7-f24c8fb02c28 |        M2J 1J3 |              M5B 2K3 |          Ryerson |       6.4794e+09
+cqlsh:university_ass> CREATE INDEX ON university(university_name);
+cqlsh:university_ass> // Q2, Find information about a given university 
+cqlsh:university_ass> select university_address, university_phone, university_name from university where university_name = 'UofT';
+
+ university_address | university_phone | university_name
+--------------------+------------------+-----------------
+            M5S 2V8 |       4.1697e+09 |            UofT
+
+(1 rows)
+cqlsh:university_ass> select university_address, university_phone, university_name from university where university_name = 'Ryerson';
+
+ university_address | university_phone | university_name
+--------------------+------------------+-----------------
+            M5B 2K3 |       6.4794e+09 |         Ryerson
+cqlsh:university_ass> CREATE TABLE person_near_university (id uuid, university_names text, university_addresses text, university_phone float, person_name text, person_address text, distance float, PRIMARY KEY(university_names, distance));
+cqlsh:university_ass> INSERT INTO person_near_university (id, university_names, university_addresses, university_phone, person_name, person_address, distance) VALUES (9ee49ef4-320f-4326-a9b3-a2f00a9dcdf5, 'UofT', 'M5S 2V8', 4169745467, 'Ashish', 'M1J 2G6', 15.2);
+cqlsh:university_ass> INSERT INTO person_near_university (id, university_names, university_addresses, university_phone, person_name, person_address, distance) VALUES (672bb054-fc9a-4904-b658-3f5996851d74, 'UofT', 'M5S 2V8', 4169745467, 'Isaac', 'M2J 1J3', 14.46);
+cqlsh:university_ass> INSERT INTO person_near_university (id, university_names, university_addresses, university_phone, person_name, person_address, distance) VALUES (c425af4a-8a68-42b8-98c7-f24c8fb02c28, 'Ryerson', 'M5B 2K3', 6479374567, 'Isaac', 'M2J 1J3', 15);
+cqlsh:university_ass> INSERT INTO person_near_university (id, university_names, university_addresses, university_phone, person_name, person_address, distance) VALUES (fb83d38a-5b89-4eec-b1a7-0284544580f2, 'Ryerson', 'M5B 2K3', 6479374567, 'Ashish', 'M1J 2G6', 14.45);
+cqlsh:university_ass> select * from person_near_university;
+
+ university_names | distance | id                                   | person_address | person_name | university_addresses | university_phone
+------------------+----------+--------------------------------------+----------------+-------------+----------------------+------------------
+          Ryerson |    14.45 | fb83d38a-5b89-4eec-b1a7-0284544580f2 |        M1J 2G6 |      Ashish |              M5B 2K3 |       6.4794e+09
+          Ryerson |       15 | c425af4a-8a68-42b8-98c7-f24c8fb02c28 |        M2J 1J3 |       Isaac |              M5B 2K3 |       6.4794e+09
+             UofT |    14.46 | 672bb054-fc9a-4904-b658-3f5996851d74 |        M2J 1J3 |       Isaac |              M5S 2V8 |       4.1697e+09
+             UofT |     15.2 | 9ee49ef4-320f-4326-a9b3-a2f00a9dcdf5 |        M1J 2G6 |      Ashish |              M5S 2V8 |       4.1697e+09
+
+cqlsh:university_ass> // Q3, Find people(Only names) interested near a university
+cqlsh:university_ass> select university_names, person_name, min(distance) from person_near_university where university_names = 'UofT';
+
+ university_names | person_name | system.min(distance)
+------------------+-------------+----------------------
+             UofT |       Isaac |                14.46
+
+(1 rows)
+cqlsh:university_ass> select university_names, person_name, min(distance) from person_near_university where university_names = 'Ryerson';
+
+ university_names | person_name | system.min(distance)
+------------------+-------------+----------------------
+          Ryerson |      Ashish |                14.45
+cqlsh:university_ass> ALTER TABLE course ADD university_name text;
+cqlsh:university_ass> // Q4, Find courses whose registration date is in future based on universities found in Q1
+cqlsh:university_ass> INSERT INTO course (course_id, university_name) VALUES ('RYER_SCS_01', 'Ryerson');
+cqlsh:university_ass> INSERT INTO course (course_id, university_name) VALUES ('CSC_UOFT_01', 'UofT');
+cqlsh:university_ass> select * from course;
+
+ course_id   | course_cost | course_name                                                       | course_registration_date | university_name
+-------------+-------------+-------------------------------------------------------------------+--------------------------+-----------------
+ RYER_SCS_01 |        7000 | Certificate in Data Analytics, Big Data, and Predictive Analytics |       October 17th, 2018 |         Ryerson
+ CSC_UOFT_01 |        4000 |                                          Data Science Certificate |     September 16th, 2018 |            UofT
+
+cqlsh:university_ass> CREATE INDEX ON person(person_name);
+cqlsh:university_ass> // Q5, Find details about a person found in Q3  
+cqlsh:university_ass> select min(university_distance),  person_name, person_address, person_phone from person where person_name = 'Isaac';
+
+ system.min(university_distance) | person_name | person_address | person_phone
+---------------------------------+-------------+----------------+--------------
+                           14.46 |       Isaac |        M2J 1J3 |   6.5799e+09
+
+(1 rows)
+
+Warnings :
+Aggregation query used without partition key
+
+cqlsh:university_ass> select min(university_distance),  person_name, person_address, person_phone from person where person_name = 'Ashish';
+
+ system.min(university_distance) | person_name | person_address | person_phone
+---------------------------------+-------------+----------------+--------------
+                           14.45 |      Ashish |        M1J 2G6 |   6.5785e+09
+
+(1 rows)
+
+Warnings :
+Aggregation query used without partition key
+
+cqlsh:university_ass> ALTER TABLE person ADD university_name text;
+cqlsh:university_ass> INSERT INTO person (id, university_name) values (9ee49ef4-320f-4326-a9b3-a2f00a9dcdf5, 'UofT');
+cqlsh:university_ass> INSERT INTO person (id, university_name) values (672bb054-fc9a-4904-b658-3f5996851d74, 'UofT');           
+cqlsh:university_ass> INSERT INTO person (id, university_name) values (c425af4a-8a68-42b8-98c7-f24c8fb02c28, 'Ryerson');    
+cqlsh:university_ass> INSERT INTO person (id, university_name) values (fb83d38a-5b89-4eec-b1a7-0284544580f2, 'Ryerson');
+cqlsh:university_ass> select * from person;
+
+ id                                   | person_address | person_name | person_phone | university_address | university_distance | university_name
+--------------------------------------+----------------+-------------+--------------+--------------------+---------------------+-----------------
+ 9ee49ef4-320f-4326-a9b3-a2f00a9dcdf5 |        M1J 2G6 |      Ashish |   6.5785e+09 |            M5S 2V8 |                15.2 |            UofT
+ 672bb054-fc9a-4904-b658-3f5996851d74 |        M2J 1J3 |       Isaac |   6.5799e+09 |            M5S 2V8 |               14.46 |            UofT
+ c425af4a-8a68-42b8-98c7-f24c8fb02c28 |        M2J 1J3 |       Isaac |   6.5799e+09 |            M5B 2K3 |                  15 |         Ryerson
+ fb83d38a-5b89-4eec-b1a7-0284544580f2 |        M1J 2G6 |      Ashish |   6.5785e+09 |            M5B 2K3 |               14.45 |         Ryerson
+
+(4 rows)
+
