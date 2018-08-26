@@ -1,0 +1,38 @@
+Objective: Understand JSON, MongoDB documents and Be able to run simple queries in MongoDB
+
+In https://docs.mongodb.com/getting-started/shell/
+Read introduction and download the the example dataset (https://raw.githubusercontent.com/mongodb/docs-assets/primer-dataset/primer-dataset.json)
+(note: we will NOT use mongoimport to import the data but if anyone wants to figure it out â€“ additional points!)
+
+Read brief overview of mongo db shell (We are not using Compass UI).
+Read and RUN insert, find, update, remove and aggregate queries as described below. (here instead of mongoimport, just use first 20 records/documents from primer-dataset.json and use insert to add them to your collection).
+Indexes section â€“ additional points.
+
+NOTES:
+
+    INSERT: The exercise requires first 20 documents to be inserted. (Don't forget to remove $ from $date when copying from json data file. Just remove all $ signs)
+    FIND: For find, text file should have all the 20 records returned.
+    REMOVE: For Removal, remove only 1 record with cuisine American.
+    UPDATE: For Update, update records set zipcode to 11214 where zipcode is 11215
+
+
+Submission:
+
+Submit txt file for each one of operations you've performed (insert.txt, find.txt, update.txt, remove.txt). Each file content should like:
+
+Cluster0-shard-0:PRIMARY> db.restaurants.find(){ "_id" : ObjectId("59c7cefd599886b420716c4c"), "address" : { "street" : "2 Avenue", "zipcode" : "10075", "building" : "1480", "coord" : [ -73.9557413, 40.7720266 ] }, "borough" : "Manhattan", "cuisine" : "Italian", "grades" : [ { "date" : ISODate("2014-10-01T00:00:00Z"), "grade" : "A", "score" : 11 }, { "date" : ISODate("2014-01-16T00:00:00Z"), "grade" : "B", "score" : 17 } ], "name" : "Vella", "restaurant_id" : "41704620" }
+
+Multiple operations of the same nature should go to the same file, for example all find operations should go to same find.txt.
+   
+
+
+Marking Schema
+
+    Base points are equally divided between insert, find, update, remove - 25% each.
+    mongoimport, aggregate and indexes are optional  - additional 20% each. (Name: aggregate.txt, index.txt, import.txt)
+
+
+    aggregate - For borough Brooklyn, get count by zipcodes.
+    indexes - Create compound index on zipcode ascending and restaurant_id descending order
+    mongoimport - please submit import command
+   

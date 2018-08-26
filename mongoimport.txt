@@ -1,0 +1,6 @@
+isaac@isaac-HP-Laptop-15-bs0xx:~$ mongoimport --file "/home/isaac/Fundamentals_of_Data_Science_Certificate/3252 - Big Data/A1/restaurant.json" --collection "restaurant"
+2018-05-26T21:20:30.215-0400	connected to: localhost
+2018-05-26T21:20:30.875-0400	imported 25359 documents
+
+> db.restaurant.count()
+25359
